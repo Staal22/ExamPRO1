@@ -357,26 +357,26 @@ void task3()
     
 }
 
-//checks the char we are currently pointing at
+// Checks the char we are currently pointing at
 char peek()
 {
     return *equationC;
 }
 
-//++ has higher precedence than * here, so first increment ecuationC (moving to next char in the string/array)
-//and then return the value we pointed to before the increment
+// ++ has higher precedence than * here, so first increment ecuationC (moving to next char in the string/array)
+// and then return the value we pointed to before the increment
 char get()
 {
     return *equationC++;
 }
-//essentially get() gets called when we know we can move on the next char
+// essentially get() gets called when we know we can move on the next char
 
-int number()    //only called if we know we need to find a number
+int number()    // only called if we know we need to find a number
 {
-    int result = get() - '0';   //char '7' - '0' = int 7
-    while (peek() >= '0' && peek() <= '9')  //as long as the current char is a number, we keep going
+    int result = get() - '0';   // char '7' - '0' = int 7
+    while (peek() >= '0' && peek() <= '9')  // as long as the current char is a number, we keep going
     {
-        result = 10 * result + get() - '0'; //example: 32 read as 3*10+2, 457 as (((4)*10+5)*10+7) and so on
+        result = 10 * result + get() - '0'; // example: 32 read as 3*10+2, 457 as (((4)*10+5)*10+7) and so on
     }
     return result;
 }
@@ -387,30 +387,30 @@ int factor()
         return number();
     else if (peek() == '-')
     {
-        get();  //move past the - sign
-        return -factor();   //makes it so the value we will get from number() on the next iteration of factor() will be negative
+        get();  // move one
+        return -factor();   // we moved past the - sign, so now we run factor again and just return the negative value of number()
     }
     return 0; // error
 }
 
 int term()
 {
-    int result = factor();  //can be negative or positive
-    while (peek() == '*' || peek() == '/')
+    int result = factor();  // can be negative or positive
+    while (peek() == '*' || peek() == '/')  // check for division and multiplication first
         if (get() == '*')
             result *= factor();
         else
-            result /= factor(); //no error for dividing by 0 so watch out :)
+            result /= factor(); // no error for dividing by 0 so watch out :)
     return result;
 }
 
 int expression()
 {
     int result = term();
-    while (peek() == '+' || peek() == '-')  //wait for + or - operator
-        if (get() == '+')   //now use get() to move past the + sign
+    while (peek() == '+' || peek() == '-')  // wait for + or - operator
+        if (get() == '+')   // now use get() to move past the operator
             result += term();
         else
             result -= term();
-    return result;  //finished calculation
+    return result;  // finished calculation
 }
